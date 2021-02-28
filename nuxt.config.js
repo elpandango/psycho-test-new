@@ -11,14 +11,19 @@ export default {
   ** See https://nuxtjs.org/api/configuration-head
   */
   head: {
-    title: process.env.npm_package_name || '',
+    title: 'Психологические тесты',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       { hid: 'description', name: 'description', content: process.env.npm_package_description || '' }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      { rel: 'preconnect', href: 'https://fonts.gstatic.com' },
+      {
+        rel: 'stylesheet',
+        href: 'https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap'
+      }
     ]
   },
 
@@ -26,6 +31,10 @@ export default {
   ** Global CSS
   */
   css: [
+    // CSS file in the project
+    '~/assets/css/main.css',
+    // SCSS file in the project
+    '~/assets/css/main.scss'
   ],
 
   /*
@@ -45,8 +54,6 @@ export default {
   ** Nuxt.js dev-modules
   */
   buildModules: [
-    // Doc: https://github.com/nuxt-community/eslint-module
-    '@nuxtjs/eslint-module'
   ],
 
   /*
@@ -54,8 +61,16 @@ export default {
   */
   modules: [
     // Doc: https://http.nuxtjs.org
-    '@nuxt/http'
+    '@nuxt/http',
+    '@nuxtjs/style-resources',
+    'cookie-universal-nuxt'
   ],
+
+  styleResources: {
+    scss: [
+      './assets/css/_variables.scss' // use underscore "_" & also file extension ".scss"
+    ]
+  },
 
   /*
   ** Server Middleware
