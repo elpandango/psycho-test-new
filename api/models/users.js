@@ -17,9 +17,10 @@ module.exports = class User {
     this.education = education;
   }
 
-  static async addTestResult(id, testName, testData) {
-    console.log('addTestResult ', id, testName, testData);
-    // const response = await axios.put(`https://psycho-tests.firebaseio.com/data/${id}/tests/${testName}.json`, testData);
+  static async addTestResult(testName, userId, testData) {
+    console.log('addTestResult ', testName, userId, testData);
+    const response = await axios.put(`https://psycho-tests.firebaseio.com/data/${userId}/tests/${testName}.json`, testData);
+    return response.data;
   }
 
   // static async getUserTestResults(id) {

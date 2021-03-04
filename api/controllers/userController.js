@@ -11,8 +11,8 @@ exports.postAddUser = async(req, res, next) => {
   res.json(userId.name);
 };
 
-// exports.postAddTestResult = async(req, res, next) => {
-//   const result = await User.addTestResult(req.body.userId, req.body.type, req.body.data);
-//   res.json('success');
-// };
+exports.postAddTestResult = async(req, res, next) => {
+  const result = await User.addTestResult(req.body.type, req.body.userId, req.body.data);
+  res.json('success');
+};
 

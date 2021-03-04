@@ -54,19 +54,6 @@
         </div>
       </div>
 
-      <div class="form-row">
-        <div class="column w100p">
-          <h3 class="h3 mar-b-10">Образование</h3>
-          <select v-model="user.education"
-                  class="form-control">
-            <option value="Укажите Ваше образование" selected disabled>Укажите Ваше образование</option>
-            <option v-for="option in educationArray"
-                    :value="option">{{option}}
-            </option>
-          </select>
-        </div>
-      </div>
-
       <div class="form-row mar-b-0">
         <div class="column w100p align-fe">
           <button type="button"
@@ -86,13 +73,12 @@
   export default {
     data () {
       return {
-        educationArray: ['Общее среднее образование', 'Профессионально-техническое образование', 'Высшее образование', 'Последипломное образование', 'Аспирантура', 'Докторантура', 'другое…'],
         sexArray: ['Мужской', 'Женский'],
         user: {
           name: '',
           age: null,
-          education: null,
-          sex: null
+          sex: null,
+          userId: null
         }
       }
     },
@@ -102,16 +88,19 @@
     //     test
     //   }
     // },
+    mounted() {
+      const user = this.$cookies.get('user');
+      console.log(user)
+    },
     methods: {
       async addNewUser () {
-        const data = await this.$http.$post('/api/users/add-user', { user: this.user }, {
+        this.user.userId = await this.$http.$post('/api/users/add-user', { user: this.user }, {
           serverTimeout: 5000
         })
 
-        console.log('data: ', data)
+        console.log(this.user)
 
-        const userId = result.data
-        this.$cookies.set('userId', userId, {
+        this.$cookies.set('user', JSON.stringify(this.user), {
           path: '/',
           maxAge: 60 * 60 * 24 * 7
         })
@@ -119,12 +108,12 @@
       async redirectToTests () {
         await this.addNewUser()
 
-        // this.$router.push({path: '/rotter/'})
+        // this.$router.push({path: '/tests/'})
       },
     },
     computed: {
       redirectBtnDisabled () {
-        return !(this.user.name !== '' && this.user.name.length > 0 && this.user.age && this.user.education && this.user.sex)
+        return !(this.user.name !== '' && this.user.name.length > 0 && this.user.age && this.user.sex)
       }
     }
   }

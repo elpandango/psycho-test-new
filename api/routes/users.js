@@ -8,6 +8,7 @@ const router = Router();
 // });
 
 router.post('/users/add-user', userController.postAddUser);
+router.post('/users/add-test-result', userController.postAddTestResult);
 
 // /* GET user by ID. */
 // router.get('/users/:id', function (req, res, next) {

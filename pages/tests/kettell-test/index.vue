@@ -1,0 +1,140 @@
+<template>
+  <div class="test-content">
+    <div class="result-block mar-b-30"
+         v-if="answerIndex <= answersPairsArray.length">
+      <div class="text">Вопрос {{answerIndex}} из {{answersPairsArray.length}} ({{calcPercent()}}%)</div>
+      <div class="bg-fill-progress"
+           :style="{width: calcPercent() + '%'}"></div>
+    </div>
+
+    <div class="answers-block mar-b-30"
+         v-if="answerIndex <= answersPairsArray.length">
+
+      <div class="answers-content"
+           v-for="(answer, index) in answersPairsArray"
+           :key="index"
+           v-if="answer.id === answerIndex">
+
+        <h3 class="h3 mar-b-30">{{answer.question}}</h3>
+
+        <div class="answer"
+             @click="answerClicked(0)">
+          <template v-if="user && user.sex && user.sex === 'Мужской'">Да, я согласен</template>
+          <template v-else>Да, я согласна</template>
+        </div>
+        <div class="answer"
+             @click="answerClicked( 1)">
+          <template v-if="user && user.sex && user.sex === 'Мужской'">Может быть, я согласен</template>
+          <template v-else>Может быть, я согласна</template>
+        </div>
+        <div class="answer"
+             @click="answerClicked( 2)">
+          <template v-if="user && user.sex && user.sex === 'Мужской'">Нет, я не согласен</template>
+          <template v-else>Нет, я не согласна</template>
+        </div>
+      </div>
+    </div>
+
+    <div class="result-block alert-danger mar-b-30">
+      Внимание! Результаты и интерпретации, полученные без участия специалистов, не следует воспринимать слишком
+      серьезно.
+      Диагностическую ценность имеют только исследования, проведенные профессиональным психологом.
+    </div>
+
+  </div>
+</template>
+
+<script>
+  import Accordion from '~/components/Accordion/Accordion'
+  import kettelAnswersPairsArray from '../../../public/data/kettelTestAnswers'
+
+  export default {
+    name: 'index',
+    head: {
+      title: 'Психологические тесты. Тест Кеттелла'
+    },
+    components: {
+      Accordion,
+    },
+    data () {
+      return {
+        answersPairsArray: kettelAnswersPairsArray,
+        answerIndex: 1,
+        externality: 0,
+        internality: 0,
+        answerChosenArray: [],
+        user: 'unknown user',
+        testSendSuccess: false,
+        ajaxLoading: false,
+      }
+    },
+    mounted () {
+      const user = this.$cookies.get('user')
+      if (user) {
+        this.user = user
+      }
+
+      console.log(user)
+    },
+    methods: {
+      calcPercent () {
+        return Math.floor((this.answerIndex / this.answersPairsArray.length) * 100)
+      },
+      calcResultPercent (value) {
+        return Math.round((value / (this.answersPairsArray.length - 6)) * 100)
+      },
+      async answerClicked (variant) {
+        let chosenVariant
+        switch (variant) {
+          case 0: {
+            chosenVariant = 'a'
+            break
+          }
+          case 1: {
+            chosenVariant = 'b'
+            break
+          }
+          case 2: {
+            chosenVariant = 'c'
+            break
+          }
+          default: {
+            chosenVariant = 'a'
+            break
+          }
+        }
+        this.answerChosenArray.push({
+          id: this.answerIndex,
+          variant: chosenVariant,
+          testLength: this.answersPairsArray.length
+        })
+
+        console.log('this.answerChosenArray: ', this.answerChosenArray)
+        this.answerIndex++
+
+        await this.sendTestData()
+      },
+      async sendTestData () {
+        const user = this.$cookies.get('user')
+        // console.log('user ', user);
+
+        let response
+        try {
+          response = await this.$http.$post('/api/users/add-test-result', {
+            type: 'kettel-test',
+            userId: user.userId,
+            data: this.answerChosenArray
+          })
+
+        } catch (e) {
+          console.log(e)
+        }
+
+        console.log('sendTestData response: ', response)
+      },
+    }
+
+  }
+</script>
+
+<style scoped lang="scss" src="./styles.scss"></style>
