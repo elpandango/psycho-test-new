@@ -88,10 +88,6 @@
     //     test
     //   }
     // },
-    mounted() {
-      const user = this.$cookies.get('user');
-      console.log(user)
-    },
     methods: {
       async addNewUser () {
         this.user.userId = await this.$http.$post('/api/users/add-user', { user: this.user }, {
@@ -107,8 +103,7 @@
       },
       async redirectToTests () {
         await this.addNewUser()
-
-        // this.$router.push({path: '/tests/'})
+        this.$router.push({ path: '/tests/' })
       },
     },
     computed: {

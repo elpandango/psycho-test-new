@@ -1,5 +1,6 @@
 <template>
-  <div class="test-content">
+  <div class="test-content"
+       v-if="loaded">
     <div class="result-block mar-b-30"
          v-if="answerIndex <= answersPairsArray.length">
       <div class="text">Вопрос {{answerIndex}} из {{answersPairsArray.length}} ({{calcPercent()}}%)</div>
@@ -45,6 +46,7 @@
 </template>
 
 <script>
+  import { mapGetters } from 'vuex'
   import selfPortraitAnswersPairsArray from '../../../public/data/selfPortraitTestAnswers'
   import Accordion from '~/components/Accordion/Accordion'
 
@@ -60,21 +62,16 @@
       return {
         answersPairsArray: selfPortraitAnswersPairsArray,
         answerIndex: 1,
-        externality: 0,
-        internality: 0,
         answerChosenArray: [],
         user: 'unknown user',
         testSendSuccess: false,
         ajaxLoading: false,
+        loaded: false
       }
     },
-    mounted () {
-      const user = this.$cookies.get('user')
-      if (user) {
-        this.user = user
-      }
-
-      console.log(user)
+    async mounted () {
+      await this.getCurrentTestProgress(this.getUser.userId, 'self-portrait')
+      this.loaded = true
     },
     methods: {
       calcPercent () {
@@ -103,6 +100,9 @@
             break
           }
         }
+
+        console.log(' this.answerIndex: ', this.answerIndex)
+
         this.answerChosenArray.push({
           id: this.answerIndex,
           variant: chosenVariant,
@@ -132,6 +132,23 @@
 
         console.log('sendTestData response: ', response)
       },
+      async getCurrentTestProgress (userId, testName) {
+        const { data } = await this.$http.$get(`/api/users/fetch-current-test-progress?user=${userId}&testName=${testName}`,
+          {
+            serverTimeout: 5000
+          })
+        console.log(data)
+
+        if (data && data.length > 0) {
+          this.answerIndex = data.length + 1
+          console.log('this.answerIndex loaded: ', this.answerIndex)
+        }
+      },
+    },
+    computed: {
+      ...mapGetters([
+        'getUser'
+      ])
     }
 
   }

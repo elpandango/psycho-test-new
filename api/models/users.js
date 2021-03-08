@@ -10,11 +10,10 @@ const axios = require('axios');
 // }
 
 module.exports = class User {
-  constructor(name, age, sex, education) {
+  constructor(name, age, sex) {
     this.name = name;
     this.age = age;
     this.sex = sex;
-    this.education = education;
   }
 
   static async addTestResult(testName, userId, testData) {
@@ -37,11 +36,15 @@ module.exports = class User {
     return response.data;
   }
 
-  // static async getAdminData({email, password}) {
-  //   const users = await this.fetchAllUsers('full');
-  //   const admin = users.find(user => user.data.user.name === 'Admin');
-  //   return admin.data.user.email === email && admin.data.user.password === +password;
-  // }
+  static async fetchAllTests(userId) {
+    const response = await axios.get(`https://psycho-tests.firebaseio.com/data/${userId}/tests.json`);
+    return response.data ?? [];
+  }
+
+  static async fetchCurrentTestProgress(userId, testName) {
+    const response = await axios.get(`https://psycho-tests.firebaseio.com/data/${userId}/tests/${testName}.json`);
+    return response.data ?? [];
+  }
 
   // static async fetchAllUsers(mode = 'short') {
   //   const response = await axios.get('https://psycho-tests.firebaseio.com/data.json');

@@ -2,13 +2,10 @@ const { Router } = require('express');
 const userController = require('../controllers/userController');
 const router = Router();
 
-/* GET users listing. */
-// router.get('/users', function (req, res, next) {
-//   res.json(users)
-// });
-
 router.post('/users/add-user', userController.postAddUser);
 router.post('/users/add-test-result', userController.postAddTestResult);
+router.get('/users/fetch-all-tests', userController.getAllTests)
+router.get('/users/fetch-current-test-progress', userController.getCurrentTestProgress)
 
 // /* GET user by ID. */
 // router.get('/users/:id', function (req, res, next) {
