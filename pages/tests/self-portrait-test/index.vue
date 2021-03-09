@@ -49,6 +49,7 @@
   import { mapGetters } from 'vuex'
   import selfPortraitAnswersPairsArray from '../../../public/data/selfPortraitTestAnswers'
   import Accordion from '~/components/Accordion/Accordion'
+  import UtilityClass from '../../../utils/UtilityClass'
 
   export default {
     name: 'index',
@@ -69,8 +70,14 @@
         loaded: false
       }
     },
+    created () {
+      console.log(this.getUser.userId)
+    },
     async mounted () {
-      await this.getCurrentTestProgress(this.getUser.userId, 'self-portrait')
+      const url = `/api/users/fetch-current-test-progress?user=${this.getUser.userId}&testName=self-portrait`
+      const { answerIndex, answerChosenArray } = await UtilityClass.getCurrentTestProgress('get', url)
+      this.answerIndex = answerIndex
+      this.answerChosenArray = [...answerChosenArray]
       this.loaded = true
     },
     methods: {
@@ -101,48 +108,28 @@
           }
         }
 
-        console.log(' this.answerIndex: ', this.answerIndex)
-
         this.answerChosenArray.push({
           id: this.answerIndex,
           variant: chosenVariant,
           testLength: this.answersPairsArray.length
         })
 
-        console.log('this.answerChosenArray: ', this.answerChosenArray)
         this.answerIndex++
-
         await this.sendTestData()
       },
       async sendTestData () {
-        const user = this.$cookies.get('user')
-        // console.log('user ', user);
-
         let response
         try {
           response = await this.$http.$post('/api/users/add-test-result', {
             type: 'self-portrait',
-            userId: user.userId,
+            userId: this.getUser.userId,
             data: this.answerChosenArray
           })
 
         } catch (e) {
           console.log(e)
         }
-
         console.log('sendTestData response: ', response)
-      },
-      async getCurrentTestProgress (userId, testName) {
-        const { data } = await this.$http.$get(`/api/users/fetch-current-test-progress?user=${userId}&testName=${testName}`,
-          {
-            serverTimeout: 5000
-          })
-        console.log(data)
-
-        if (data && data.length > 0) {
-          this.answerIndex = data.length + 1
-          console.log('this.answerIndex loaded: ', this.answerIndex)
-        }
       },
     },
     computed: {

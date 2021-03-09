@@ -1,5 +1,6 @@
 <template>
-  <div class="test-content">
+  <div class="test-content"
+       v-if="loaded">
     <div class="result-block mar-b-30"
          v-if="answerIndex <= answersPairsArray.length">
       <div class="text">Вопрос {{answerIndex}} из {{answersPairsArray.length}} ({{calcPercent()}}%)</div>
@@ -111,8 +112,10 @@
 </template>
 
 <script>
+  import { mapGetters } from 'vuex'
   import behaviorAnswersPairsArray from '../../../public/data/behaviorTestAnswers'
   import Accordion from '~/components/Accordion/Accordion'
+  import UtilityClass from '../../../utils/UtilityClass'
 
   export default {
     name: 'index',
@@ -123,13 +126,21 @@
       return {
         answersPairsArray: behaviorAnswersPairsArray,
         answerIndex: 1,
-        externality: 0,
-        internality: 0,
         answerChosenArray: [],
         user: 'unknown user',
         testSendSuccess: false,
-        ajaxLoading: false
+        ajaxLoading: false,
+        loaded: false
       }
+    },
+    async mounted () {
+      const url = `/api/users/fetch-current-test-progress?user=${this.getUser.userId}&testName=conflict-behavior`
+      const { answerIndex, answerChosenArray } = await UtilityClass.getCurrentTestProgress('get', url)
+      console.log('answerIndex, answerChosenArray: ', answerIndex, answerChosenArray)
+
+      this.answerIndex = answerIndex
+      this.answerChosenArray = [...answerChosenArray]
+      this.loaded = true
     },
     methods: {
       calcPercent () {
@@ -187,6 +198,11 @@
 
         console.log('sendTestData response: ', response)
       },
+    },
+    computed: {
+      ...mapGetters([
+        'getUser'
+      ])
     }
 
   }

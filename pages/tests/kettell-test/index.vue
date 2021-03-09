@@ -1,5 +1,6 @@
 <template>
-  <div class="test-content">
+  <div class="test-content"
+       v-if="loaded">
     <div class="result-block mar-b-30"
          v-if="answerIndex <= answersPairsArray.length">
       <div class="text">Вопрос {{answerIndex}} из {{answersPairsArray.length}} ({{calcPercent()}}%)</div>
@@ -14,23 +15,15 @@
            v-for="(answer, index) in answersPairsArray"
            :key="index"
            v-if="answer.id === answerIndex">
-
         <h3 class="h3 mar-b-30">{{answer.question}}</h3>
-
         <div class="answer"
-             @click="answerClicked(0)">
-          <template v-if="user && user.sex && user.sex === 'Мужской'">Да, я согласен</template>
-          <template v-else>Да, я согласна</template>
+             @click="answerClicked(0)">{{answer.answer_a}}
         </div>
         <div class="answer"
-             @click="answerClicked( 1)">
-          <template v-if="user && user.sex && user.sex === 'Мужской'">Может быть, я согласен</template>
-          <template v-else>Может быть, я согласна</template>
+             @click="answerClicked( 1)">{{answer.answer_b}}
         </div>
         <div class="answer"
-             @click="answerClicked( 2)">
-          <template v-if="user && user.sex && user.sex === 'Мужской'">Нет, я не согласен</template>
-          <template v-else>Нет, я не согласна</template>
+             @click="answerClicked( 3)">{{answer.answer_c}}
         </div>
       </div>
     </div>
@@ -45,8 +38,10 @@
 </template>
 
 <script>
+  import { mapGetters } from 'vuex'
   import Accordion from '~/components/Accordion/Accordion'
   import kettelAnswersPairsArray from '../../../public/data/kettelTestAnswers'
+  import UtilityClass from '../../../utils/UtilityClass'
 
   export default {
     name: 'index',
@@ -60,21 +55,21 @@
       return {
         answersPairsArray: kettelAnswersPairsArray,
         answerIndex: 1,
-        externality: 0,
-        internality: 0,
         answerChosenArray: [],
         user: 'unknown user',
         testSendSuccess: false,
         ajaxLoading: false,
+        loaded: false
       }
     },
-    mounted () {
-      const user = this.$cookies.get('user')
-      if (user) {
-        this.user = user
-      }
+    async mounted () {
+      const url = `/api/users/fetch-current-test-progress?user=${this.getUser.userId}&testName=kettel-test`
+      const { answerIndex, answerChosenArray } = await UtilityClass.getCurrentTestProgress('get', url)
+      console.log('answerIndex, answerChosenArray: ', answerIndex, answerChosenArray)
 
-      console.log(user)
+      this.answerIndex = answerIndex
+      this.answerChosenArray = [...answerChosenArray]
+      this.loaded = true
     },
     methods: {
       calcPercent () {
@@ -132,6 +127,11 @@
 
         console.log('sendTestData response: ', response)
       },
+    },
+    computed: {
+      ...mapGetters([
+        'getUser'
+      ])
     }
 
   }

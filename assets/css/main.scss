@@ -313,6 +313,17 @@ select.form-control {
   background-color: $active-color;
 }
 
+.btn-success {
+  color: #fff;
+  background-color: #28a745;
+  border-color: #28a745;
+
+  &:hover {
+    color: #fff;
+    background-color: #218838;
+    border-color: #1e7e34;
+  }
+}
 
 //Margins
 
@@ -580,6 +591,7 @@ select.form-control {
     cursor: pointer;
     border: 1px solid #FFFFFF;
     width: 100%;
+
     &.active {
       background: #C6E2FF;
       border: 1px solid #0000FF;
@@ -590,10 +602,12 @@ select.form-control {
 table {
   width: 100%;
 }
+
 table, th, td {
   border-collapse: collapse;
   border: 1px solid black;
 }
+
 th, td {
   padding: 6px;
 }
@@ -615,11 +629,13 @@ th, td {
   z-index: 150;
   background-color: #fff;
 }
+
 .lds-dual-ring {
   display: inline-block;
   width: 80px;
   height: 80px;
 }
+
 .lds-dual-ring:after {
   content: " ";
   display: block;
@@ -631,6 +647,7 @@ th, td {
   border-color: #999999 transparent #999999 transparent;
   animation: lds-dual-ring 1.2s linear infinite;
 }
+
 @keyframes lds-dual-ring {
   0% {
     transform: rotate(0deg);
@@ -643,6 +660,7 @@ th, td {
 .btn-block.with-spinner {
   display: flex;
   align-items: center;
+
   .spinner {
     display: flex;
     align-items: center;
@@ -672,3 +690,4 @@ th, td {
     }
   }
 }
+
