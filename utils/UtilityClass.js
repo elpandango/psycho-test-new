@@ -21,13 +21,6 @@ function conflictBehaviorCalc (dataArray) {
     avoidance: 0,
     adaptation: 0,
   }
-  // let rivalry = 0
-  // let cooperation = 0
-  // let compromise = 0
-  // let avoidance = 0
-  // let adaptation = 0
-
-  // console.log(dataArray)
 
   for (const key in dataArray) {
     let item = dataArray[key]
@@ -274,10 +267,7 @@ function conflictBehaviorCalc (dataArray) {
     }
   }
 
-  // console.log(rivalry, cooperation, compromise, avoidance, adaptation)
-
   const testResult = dataFields.testItemName.map((item, index) => {
-    console.log(item, index);
     return {
       name: dataFields.russianItemName[index],
       value: obj[item]

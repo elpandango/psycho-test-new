@@ -2,12 +2,18 @@ const express = require('express')
 const bodyParser = require('body-parser');
 // Create express instance
 const app = express()
+const session = require('express-session');
 
 // Require API routes
 const users = require('./routes/users')
 
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
+
+// initialize express-session
+app.use(
+  session({secret: 'randomString', resave: false, saveUninitialized: false, cookie: {maxAge: 3600000}})
+);
 
 // Import API Routes
 app.use(users)

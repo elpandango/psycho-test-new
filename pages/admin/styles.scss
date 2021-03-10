@@ -1,0 +1,59 @@
+
+.admin-form {
+  margin: 0 auto;
+  max-width: 720px;
+}
+
+.input-group {
+  width: 100%;
+  display: flex;
+
+  .form-control {
+    width: calc(100% - 90px);
+  }
+
+  .btn {
+    width: 90px;
+  }
+}
+
+.align-fe {
+  align-items: flex-end;
+}
+
+.lvl_1 {
+  color: #CC0000;
+}
+
+.lvl_2 {
+  color: #990000;
+}
+
+.lvl_3 {
+  color: inherit;
+}
+
+.lvl_4 {
+  color: #009900;
+}
+
+.lvl_5 {
+  color: #00CC00;
+}
+
+.test-results-table {
+  width: 100%;
+  border: transparent;
+
+  th {
+    border: transparent;
+
+    &.first {
+      width: 50%;
+    }
+
+    &.second {
+      width: 5%;
+    }
+  }
+}
