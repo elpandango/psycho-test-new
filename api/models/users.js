@@ -1,5 +1,8 @@
 const axios = require('axios')
 
+axios.defaults.headers.post['Content-Type'] = 'application/json;charset=utf-8';
+axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
+
 module.exports = class User {
   constructor (name, age, sex, email) {
     this.name = name
