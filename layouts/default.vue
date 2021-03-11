@@ -10,15 +10,6 @@
   </div>
 </template>
 
-<script>
-  export default {
-    created() {
-      const user = this.$cookies.get('user');
-      this.$store.dispatch('SET_USER', user)
-    }
-  }
-</script>
-
 <style>
   .default-layout {
     margin: 0;

@@ -8,9 +8,8 @@
            :style="{width: calcPercent() + '%'}"></div>
     </div>
 
-    <div class="answers-block mar-b-30"
-         v-if="answerIndex <= answersPairsArray.length">
-
+    <div v-if="answerIndex <= answersPairsArray.length"
+         class="answers-block mar-b-30">
       <div class="answers-content"
            v-for="(answer, index) in answersPairsArray"
            :key="index"
@@ -27,19 +26,16 @@
         </div>
       </div>
     </div>
-
-    <div class="result-block alert-danger mar-b-30">
-      Внимание! Результаты и интерпретации, полученные без участия специалистов, не следует воспринимать слишком
-      серьезно.
-      Диагностическую ценность имеют только исследования, проведенные профессиональным психологом.
+    <div v-else>
+      <nuxt-link to="/tests"
+                 class="test-link">Вернуться к выбору тестов
+      </nuxt-link>
     </div>
 
   </div>
 </template>
 
 <script>
-  import { mapGetters } from 'vuex'
-  import Accordion from '~/components/Accordion/Accordion'
   import kettelAnswersPairsArray from '../../../public/data/kettelTestAnswers'
   import UtilityClass from '../../../utils/UtilityClass'
 
@@ -47,9 +43,6 @@
     name: 'index',
     head: {
       title: 'Психологические тесты. Тест Кеттелла'
-    },
-    components: {
-      Accordion,
     },
     data () {
       return {
@@ -63,7 +56,11 @@
       }
     },
     async mounted () {
-      const url = `/api/users/fetch-current-test-progress?user=${this.getUser.userId}&testName=kettel-test`
+      const user = this.$cookies.get('user')
+      if (!user) {
+        this.$router.push({ path: '/' })
+      }
+      const url = `/api/users/fetch-current-test-progress?user=${user.userId}&testName=kettel-test`
       const { answerIndex, answerChosenArray } = await UtilityClass.getCurrentTestProgress('get', url)
       console.log('answerIndex, answerChosenArray: ', answerIndex, answerChosenArray)
 
@@ -111,7 +108,9 @@
       },
       async sendTestData () {
         const user = this.$cookies.get('user')
-        // console.log('user ', user);
+        if (!user) {
+          this.$router.push({ path: '/' })
+        }
 
         let response
         try {
@@ -128,11 +127,6 @@
         console.log('sendTestData response: ', response)
       },
     },
-    computed: {
-      ...mapGetters([
-        'getUser'
-      ])
-    }
 
   }
 </script>

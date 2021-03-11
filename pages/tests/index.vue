@@ -13,7 +13,7 @@
                    class="test-link">Тест личности Кеттелла
         </nuxt-link>
         <button type="button"
-                v-if="isDisabled('kettel-test')"
+                v-if="false && isDisabled('kettel-test')"
                 class="result-btn btn btn-success"
                 @click="getTestResults('kettel-test')">Получить результаты теста
         </button>
@@ -28,7 +28,7 @@
                    class="test-link">Автопортрет вашей личности (Олдхэм-Моррис)
         </nuxt-link>
         <button type="button"
-                v-if="isDisabled('self-portrait')"
+                v-if="false && isDisabled('self-portrait')"
                 class="result-btn btn btn-success"
                 @click="getTestResults('self-portrait')">Получить результаты теста
         </button>
@@ -43,7 +43,7 @@
                    class="test-link">Поведение в конфликтной ситуации
         </nuxt-link>
         <button type="button"
-                v-if="isDisabled('conflict-behavior')"
+                v-if="false && isDisabled('conflict-behavior')"
                 class="result-btn btn btn-success"
                 @click="getTestResults('conflict-behavior')">Получить результаты теста
         </button>
@@ -55,7 +55,6 @@
 </template>
 
 <script>
-  import { mapGetters } from 'vuex'
   import UtilityClass from '../../utils/UtilityClass'
 
   export default {
@@ -67,8 +66,12 @@
       }
     },
     methods: {
-      async detectPassedTests (user) {
-        const response = await this.$http.$get(`/api/users/fetch-all-tests?user=${user.userId}`,
+      async detectPassedTests () {
+        const user = this.$cookies.get('user')
+        if (!user) {
+          this.$router.push({ path: '/' })
+        }
+        const response = await this.$http.$get(`/api/users/fetch-all-user-tests?user=${user.userId}`,
           {
             serverTimeout: 5000
           })
@@ -81,7 +84,11 @@
         return false
       },
       async getTestResults (testName) {
-        const url = `/api/users/fetch-current-test-progress?user=${this.getUser.userId}&testName=${testName}`
+        const user = this.$cookies.get('user');
+        if (!user) {
+          this.$router.push({ path: '/' })
+        }
+        const url = `/api/users/fetch-current-test-progress?user=${user.userId}&testName=${testName}`
         const result = await UtilityClass.getTestResults(url, testName)
 
         console.log('getTestResults result: ', result)
@@ -89,15 +96,12 @@
     },
     async mounted () {
       const user = this.$cookies.get('user')
-      console.log(user)
+      if (!user) {
+        this.$router.push({ path: '/' })
+      }
       await this.detectPassedTests(user)
       this.loaded = true
     },
-    computed: {
-      ...mapGetters([
-        'getUser'
-      ])
-    }
   }
 </script>
 
@@ -118,31 +122,6 @@
     align-content: center;
     width: 100%;
     margin-bottom: 20px;
-  }
-
-  .test-link {
-    padding: 15px 25px;
-    width: 100%;
-    text-align: left;
-    background: #F8F8F8;
-    white-space: normal;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-shadow: 2px 2px 4px #ccc;
-    transition: all .3s;
-    color: #292929;
-    font-size: 16px;
-    cursor: pointer;
-    max-width: calc(100% - 250px);
-
-    &:hover {
-      box-shadow: 2px 2px 4px #999, inset 0 0 20px #fff;
-    }
-  }
-
-  .test-link:disabled {
-    color: #ccc;
-    cursor: not-allowed;
   }
 
   .result-btn {

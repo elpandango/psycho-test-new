@@ -54,6 +54,30 @@
         </div>
       </div>
 
+      <div class="form-row">
+        <div class="column w100p">
+          <label>
+            <input type="checkbox"
+                   v-model="user.isEmailChecked">Хочу получить результат теста по e-mail!
+          </label>
+        </div>
+      </div>
+
+      <transition name="slide-fade">
+        <div class="form-row"
+             v-if="user.isEmailChecked">
+          <div class="column w100p">
+            <h3 class="h3 mar-b-10">Email</h3>
+            <div class="input-group">
+              <input type="email"
+                     class="form-control"
+                     placeholder="Email"
+                     v-model="user.email">
+            </div>
+          </div>
+        </div>
+      </transition>
+
       <div class="form-row mar-b-0">
         <div class="column w100p align-fe">
           <button type="button"
@@ -78,16 +102,12 @@
           name: '',
           age: null,
           sex: null,
-          userId: null
+          userId: null,
+          isEmailChecked: false,
+          email: null
         }
       }
     },
-    // async asyncData ({ $http }) {
-    //   const test = await $http.$get('/api/test')
-    //   return {
-    //     test
-    //   }
-    // },
     methods: {
       async addNewUser () {
         this.user.userId = await this.$http.$post('/api/users/add-user', { user: this.user }, {

@@ -5,6 +5,7 @@ const router = Router();
 
 router.post('/users/add-user', userController.postAddUser);
 router.post('/users/add-test-result', userController.postAddTestResult);
+router.get('/users/fetch-all-user-tests', userController.getAllUserTests)
 router.get('/users/fetch-all-tests', userController.getAllTests)
 router.get('/users/fetch-current-test-progress', userController.getCurrentTestProgress)
 

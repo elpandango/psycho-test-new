@@ -8,8 +8,8 @@
            :style="{width: calcPercent() + '%'}"></div>
     </div>
 
-    <div class="answers-block mar-b-30"
-         v-if="answerIndex <= answersPairsArray.length">
+    <div v-if="answerIndex <= answersPairsArray.length"
+         class="answers-block mar-b-30">
 
       <div class="answers-content"
            v-for="(answer, index) in answersPairsArray"
@@ -35,29 +35,23 @@
         </div>
       </div>
     </div>
-
-    <div class="result-block alert-danger mar-b-30">
-      Внимание! Результаты и интерпретации, полученные без участия специалистов, не следует воспринимать слишком
-      серьезно.
-      Диагностическую ценность имеют только исследования, проведенные профессиональным психологом.
+    <div v-else>
+      <nuxt-link to="/tests"
+                 class="test-link">Вернуться к выбору тестов
+      </nuxt-link>
     </div>
 
   </div>
 </template>
 
 <script>
-  import { mapGetters } from 'vuex'
   import selfPortraitAnswersPairsArray from '../../../public/data/selfPortraitTestAnswers'
-  import Accordion from '~/components/Accordion/Accordion'
   import UtilityClass from '../../../utils/UtilityClass'
 
   export default {
     name: 'index',
     head: {
       title: 'Психологические тесты. Поведение в конфликтной ситуации, TKI (Томас-Килманн)'
-    },
-    components: {
-      Accordion,
     },
     data () {
       return {
@@ -70,11 +64,12 @@
         loaded: false
       }
     },
-    created () {
-      console.log(this.getUser.userId)
-    },
     async mounted () {
-      const url = `/api/users/fetch-current-test-progress?user=${this.getUser.userId}&testName=self-portrait`
+      const user = this.$cookies.get('user')
+      if (!user) {
+        this.$router.push({ path: '/' })
+      }
+      const url = `/api/users/fetch-current-test-progress?user=${user.userId}&testName=self-portrait`
       const { answerIndex, answerChosenArray } = await UtilityClass.getCurrentTestProgress('get', url)
       this.answerIndex = answerIndex
       this.answerChosenArray = [...answerChosenArray]
@@ -119,10 +114,14 @@
       },
       async sendTestData () {
         let response
+        const user = this.$cookies.get('user')
+        if (!user) {
+          this.$router.push({ path: '/' })
+        }
         try {
           response = await this.$http.$post('/api/users/add-test-result', {
             type: 'self-portrait',
-            userId: this.getUser.userId,
+            userId: user.userId,
             data: this.answerChosenArray
           })
 
@@ -132,11 +131,6 @@
         console.log('sendTestData response: ', response)
       },
     },
-    computed: {
-      ...mapGetters([
-        'getUser'
-      ])
-    }
 
   }
 </script>

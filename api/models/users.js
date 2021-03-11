@@ -1,32 +1,17 @@
 const axios = require('axios')
 
 module.exports = class User {
-  constructor (name, age, sex) {
+  constructor (name, age, sex, email) {
     this.name = name
     this.age = age
     this.sex = sex
-  }
-
-  static async addTestResult (testName, userId, testData) {
-    console.log('addTestResult ', testName, userId, testData)
-    const response = await axios.put(`https://psycho-tests.firebaseio.com/data/${userId}/tests/${testName}.json`, testData)
-    return response.data
+    this.email = email
   }
 
   async addNewUser () {
     const response = await axios.post('https://psycho-tests.firebaseio.com/data.json', { user: this })
     console.log('response data ', response.data)
     return response.data
-  }
-
-  static async fetchAllTests (userId) {
-    const response = await axios.get(`https://psycho-tests.firebaseio.com/data/${userId}/tests.json`)
-    return response.data ?? []
-  }
-
-  static async fetchCurrentTestProgress (userId, testName) {
-    const response = await axios.get(`https://psycho-tests.firebaseio.com/data/${userId}/tests/${testName}.json`)
-    return response.data ?? []
   }
 
   static async getAdminData ({ email, password }) {

@@ -1,4 +1,5 @@
 const User = require('../models/users')
+const Test = require('../models/tests')
 const { check, validationResult } = require('express-validator')
 
 exports.postLogin = async (req, res, next) => {
@@ -53,25 +54,31 @@ exports.postAddUser = async (req, res, next) => {
   const name = req.body.user.name
   const age = req.body.user.age
   const sex = req.body.user.sex
-  const education = req.body.user.education
+  const email = req.body.user.email
 
-  const user = new User(name, age, sex, education)
+  const user = new User(name, age, sex, email)
   const userId = await user.addNewUser()
   res.json(userId.name)
 }
 
 exports.postAddTestResult = async (req, res, next) => {
-  const result = await User.addTestResult(req.body.type, req.body.userId, req.body.data)
+  const result = await Test.addTestResult(req.body.type, req.body.userId, req.body.data)
   res.json({ data: result })
 }
 
+exports.getAllUserTests = async (req, res, next) => {
+  const result = await Test.fetchAllUserTests(req.query.user)
+  res.json({ data: result })
+
+}
+
 exports.getAllTests = async (req, res, next) => {
-  const result = await User.fetchAllTests(req.query.user)
+  const result = await Test.fetchAllTests(req.query.user)
   res.json({ data: result })
 }
 
 exports.getCurrentTestProgress = async (req, res, next) => {
   console.log(req.query.user, req.query.testName)
-  const result = await User.fetchCurrentTestProgress(req.query.user, req.query.testName)
+  const result = await Test.fetchCurrentTestProgress(req.query.user, req.query.testName)
   res.json({ data: result })
 }
