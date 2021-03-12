@@ -71,10 +71,7 @@
         if (!user) {
           this.$router.push({ path: '/' })
         }
-        const response = await this.$http.$get(`/api/users/fetch-all-user-tests?user=${user.userId}`,
-          {
-            serverTimeout: 5000
-          })
+        const response = await this.$axios.$get(`/api/users/fetch-all-user-tests?user=${user.userId}`,)
         this.testsData = { ...response.data }
       },
       isDisabled (ref) {

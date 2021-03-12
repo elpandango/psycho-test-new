@@ -92,7 +92,7 @@
       }
     },
     async mounted () {
-      this.$http.$get('/api/users/login')
+      this.$axios.$get('/api/users/login')
         .then(result => {
           this.$router.push({ path: '/admin' })
         })

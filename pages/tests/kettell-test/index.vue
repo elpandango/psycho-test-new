@@ -114,7 +114,7 @@
 
         let response
         try {
-          response = await this.$http.$post('/api/users/add-test-result', {
+          response = await this.$axios.$post('/api/users/add-test-result', {
             type: 'kettel-test',
             userId: user.userId,
             data: this.answerChosenArray

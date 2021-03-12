@@ -119,7 +119,7 @@
           this.$router.push({ path: '/' })
         }
         try {
-          response = await this.$http.$post('/api/users/add-test-result', {
+          response = await this.$axios.$post('/api/users/add-test-result', {
             type: 'self-portrait',
             userId: user.userId,
             data: this.answerChosenArray

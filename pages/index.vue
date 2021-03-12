@@ -110,9 +110,7 @@
     },
     methods: {
       async addNewUser () {
-        this.user.userId = await this.$http.$post('/api/users/add-user', { user: this.user }, {
-          serverTimeout: 5000
-        })
+        this.user.userId = await this.$axios.$post('/api/users/add-user', { user: this.user }, )
 
         console.log(this.user)
 
