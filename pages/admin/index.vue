@@ -77,7 +77,7 @@
     },
     methods: {
       async checkAuth () {
-        this.$http.$get('/api/users/login')
+        this.$axios.$get('/api/users/login')
           .then(result => {
             console.log('checkAuth ', result)
           })
@@ -86,7 +86,7 @@
           })
       },
       async fetchAllTests () {
-        const result = await this.$http.$get('/api/users/fetch-all-tests')
+        const result = await this.$axios.$get('/api/users/fetch-all-tests')
         this.userDataObject = { ...result.data }
         for (const key in this.userDataObject) {
           if (this.userDataObject[key].tests) {

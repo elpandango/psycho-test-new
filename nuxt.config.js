@@ -93,6 +93,7 @@ export default {
   */
   modules: [
     // Doc: https://http.nuxtjs.org
+    '@nuxtjs/axios',
     '@nuxt/http',
     '@nuxtjs/svg-sprite',
     '@nuxtjs/style-resources',
@@ -114,7 +115,9 @@ export default {
       './assets/css/_variables.scss' // use underscore "_" & also file extension ".scss"
     ]
   },
-
+  axios: {
+    proxy: true // Can be also an object with default options
+  },
   /*
   ** Server Middleware
   */

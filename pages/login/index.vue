@@ -72,7 +72,7 @@
 
         let response
         try {
-          response = await this.$http.$post('/api/users/login', {
+          response = await this.$axios.$post('/api/users/login', {
             email: this.email,
             password: this.password,
           })
