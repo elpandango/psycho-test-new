@@ -14,7 +14,9 @@
         <div>Имя: {{item.user.name}}</div>
         <div>Возраст: {{item.user.age}}</div>
         <div>Пол: {{item.user.sex}}</div>
-        <div>email: {{item.user.email}}</div>
+        <div class="highlighted"
+             v-if="item.user.email">email: {{item.user.email}}
+        </div>
 
         <br>
 
@@ -31,11 +33,39 @@
 
           <template v-else-if="testItem.name === 'kettel-test'">
             <h3>Тест личности Кеттела</h3>
-            <div v-for="testResult in testItem.value">
-              <div v-for="keyItem in testItem.value">
-                {{keyItem.keyName}}: {{keyItem.score}}
+            <br>
+
+            <div class="grid-container">
+              <div v-for="testResult in testItem.value"
+                   class="grid-item">
+                <table>
+                  <thead v-if="showTableHead(testResult.id)">
+                  <tr>
+                    <th class="w35"></th>
+                    <th class="w25">A</th>
+                    <th class="w25">B</th>
+                    <th class="w25">C</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr>
+                    <td class="w35 no-border bold">{{testResult.id}}</td>
+                    <td class="w25"
+                        :class="[{selected: testResult.variant === 'a'}]">{{testResult.variant === 'a' ? 'X' : ''}}
+                    </td>
+                    <td class="w25"
+                        :class="[{selected: testResult.variant === 'b'}]">{{testResult.variant === 'b' ? 'X' : ''}}
+                    </td>
+                    <td class="w25"
+                        :class="[{selected: testResult.variant === 'c'}]">{{testResult.variant === 'c' ? 'X' : ''}}
+                    </td>
+                  </tr>
+                  </tbody>
+                </table>
               </div>
             </div>
+
+
           </template>
 
           <template v-else>
@@ -76,6 +106,9 @@
       }
     },
     methods: {
+      showTableHead (id) {
+        return id === 1 || id === 26 || id === 51 || id === 76 || id === 101 || id === 126 || id === 151 || id === 176
+      },
       async checkAuth () {
         this.$axios.$get('/api/users/login')
           .then(result => {

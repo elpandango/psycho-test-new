@@ -22,7 +22,7 @@
              @click="answerClicked( 1)">{{answer.answer_b}}
         </div>
         <div class="answer"
-             @click="answerClicked( 3)">{{answer.answer_c}}
+             @click="answerClicked( 2)">{{answer.answer_c}}
         </div>
       </div>
     </div>

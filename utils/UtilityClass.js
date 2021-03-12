@@ -275,8 +275,8 @@ function conflictBehaviorCalc (dataArray) {
   })
 }
 
-function kettelCalc () {
-
+function kettelCalc (dataArray) {
+  return dataArray
 }
 
 function selfPortraitCalc (dataArray) {
@@ -551,9 +551,8 @@ export default class UtilityClass {
       result = conflictBehaviorCalc(data)
     } else if (testName === 'self-portrait') {
       result = selfPortraitCalc(data)
-      console.log(result)
     } else {
-
+      result = kettelCalc(data)
     }
 
     return result
