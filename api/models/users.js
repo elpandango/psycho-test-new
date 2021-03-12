@@ -13,7 +13,7 @@ module.exports = class User {
 
   async addNewUser () {
     const response = await axios.post('https://psycho-tests.firebaseio.com/data.json', { user: this })
-    console.log('response data ', response.data)
+    // console.log('response data ', response.data)
     return response.data
   }
 

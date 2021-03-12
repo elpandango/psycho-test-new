@@ -78,7 +78,6 @@ exports.getAllTests = async (req, res, next) => {
 }
 
 exports.getCurrentTestProgress = async (req, res, next) => {
-  console.log(req.query.user, req.query.testName)
   const result = await Test.fetchCurrentTestProgress(req.query.user, req.query.testName)
   res.json({ data: result })
 }
