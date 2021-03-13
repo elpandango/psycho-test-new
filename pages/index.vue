@@ -2,18 +2,14 @@
   <div>
 
     <div class="text-block">
-      <p>
-        Приветствую!
-      </p>
-      <p>
-        Далее вас ждет 3 теста.
-      </p>
-
-      <p>
-        Ну а теперь приступим!
-      </p>
+      <p>Приветствую!</p>
+      <p>Далее вас ждет 3 теста.</p>
+      <p>На всё прохождение тестов у вас уйдет примерно 1 час.</p>
+      <p>Отвечайте честно, долго не задумываясь над ответами.</p>
+      <p>Если хотите получить себе результаты теста с интерпретацией, то отметьте "хочу получить результаты теста по
+        e-mail" и заполните графу "Email". Я их вам вышлю, как только проведу расшифровку.</p>
+      <p>Ну а теперь приступим!</p>
     </div>
-
 
     <form class="user-form"
           @submit.prevent>
@@ -110,7 +106,7 @@
     },
     methods: {
       async addNewUser () {
-        this.user.userId = await this.$axios.$post('/api/users/add-user', { user: this.user }, )
+        this.user.userId = await this.$axios.$post('/api/users/add-user', { user: this.user },)
 
         console.log(this.user)
 
