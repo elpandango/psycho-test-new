@@ -107,7 +107,7 @@
     },
     methods: {
       showTableHead (id) {
-        return id === 1 || id === 26 || id === 51 || id === 76 || id === 101 || id === 126 || id === 151 || id === 176
+        return id === 1 || id === 33 || id === 66 || id === 99 || id === 131 || id === 163
       },
       async checkAuth () {
         this.$axios.$get('/api/users/login')
